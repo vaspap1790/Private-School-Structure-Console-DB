@@ -1,0 +1,73 @@
+CREATE DATABASE privateSchoolStructure;
+
+USE privateSchoolStructure;
+
+CREATE TABLE Courses(
+course_id INT AUTO_INCREMENT PRIMARY KEY,
+title VARCHAR(50),
+stream VARCHAR(20),
+courseType VARCHAR(20),
+startDate DATE,
+endDate DATE
+);
+
+CREATE TABLE Trainers(
+trainer_id INT AUTO_INCREMENT PRIMARY KEY,
+firstName VARCHAR(20),
+secondName VARCHAR(50),
+trainerSubject VARCHAR(50)
+);
+
+
+CREATE TABLE Students (
+student_id INT AUTO_INCREMENT PRIMARY KEY,
+firstName VARCHAR(20),
+secondName VARCHAR(50),
+birthDate DATE,
+stream VARCHAR(20),
+tuition DOUBLE
+);
+
+CREATE TABLE Assignments(
+assignment_id INT AUTO_INCREMENT PRIMARY KEY,
+title VARCHAR(50),
+assignDescription VARCHAR(80),
+subDateTime DATE,
+oralMark VARCHAR(10),
+totalMark VARCHAR(10),
+course_id INT,
+FOREIGN KEY (course_id) REFERENCES Courses (course_id)
+);
+
+CREATE TABLE AssignmentsModels(
+assignment_id INT AUTO_INCREMENT PRIMARY KEY,
+title VARCHAR(50),
+assignDescription VARCHAR(80),
+subDateTime DATE,
+course_id INT,
+FOREIGN KEY (course_id) REFERENCES Courses (course_id)
+);
+
+CREATE TABLE StudentsInCourses(
+student_id INT,
+course_id INT,
+PRIMARY KEY (student_id,course_id),
+FOREIGN KEY (student_id) REFERENCES Students (student_id),
+FOREIGN KEY (course_id) REFERENCES Courses (course_id)
+);
+
+CREATE TABLE TrainersInCourses(
+trainer_id INT,
+course_id INT,
+PRIMARY KEY (trainer_id,course_id),
+FOREIGN KEY (trainer_id) REFERENCES Trainers (trainer_id),
+FOREIGN KEY (course_id) REFERENCES Courses (course_id)
+);
+
+CREATE TABLE AssignmentsInStudents(
+student_id INT,
+assignment_id INT,
+PRIMARY KEY (student_id,assignment_id),
+FOREIGN KEY (student_id) REFERENCES Students (student_id),
+FOREIGN KEY (assignment_id) REFERENCES Assignments (assignment_id)
+);

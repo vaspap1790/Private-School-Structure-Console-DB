@@ -1,0 +1,61 @@
+USE privateSchoolStructure;
+
+-- SQL queries
+
+-- >A list of all the students<
+SELECT * 
+FROM Students;
+
+-- >A list of all the trainers<
+SELECT * 
+FROM Trainers;
+
+-- >A list of all the courses<
+SELECT * 
+FROM Courses;
+
+-- >A list of all the assignments<
+SELECT * 
+FROM Assignments;
+
+-- >All the students per course<
+SELECT c.course_id,c.title,s.student_id,s.firstName,s.secondName
+FROM Courses c
+INNER JOIN StudentsInCourses sic ON c.course_id = sic.course_id
+INNER JOIN Students s ON sic.student_id = s.student_id
+ORDER BY c.title;
+
+-- >All the trainers per course<
+SELECT c.course_id,c.title,t.trainer_id,t.firstName,t.secondName
+FROM Courses c
+INNER JOIN TrainersInCourses tic ON c.course_id = tic.course_id
+INNER JOIN Trainers t ON tic.trainer_id = t.trainer_id
+ORDER BY c.title;
+
+-- >All assignmentsmodels per courses<
+SELECT c.course_id,c.title as Course_title,a.assignment_id,a.title as Assignment_title,a.assignDescription,a.subDatetime
+FROM Courses c
+INNER JOIN AssignmentsModels a ON c.course_id = a.course_id
+ORDER BY c.title;
+
+-- >All assignments per courses<
+SELECT c.course_id,c.title as Course_title,a.assignment_id,a.title as Assignment_title,a.assignDescription,a.subDatetime,a.oralMark,a.totalMark
+FROM Courses c
+INNER JOIN Assignments a ON c.course_id = a.course_id
+ORDER BY c.title;
+
+-- >All assignments per course per student<
+SELECT s.student_id,s.firstName,s.secondName,c.course_id,c.title as Course_title ,a.assignment_id,a.title as Assignment_title,a.assignDescription,a.subDateTime,a.oralMark,a.totalMark
+FROM Students s
+INNER JOIN AssignmentsINStudents ais ON ais.student_id = s.student_id
+INNER JOIN Assignments a ON ais.assignment_id = a.assignment_id
+INNER JOIN Courses c ON a.course_id = c.course_id
+ORDER BY s.student_id,Course_title;
+
+-- >A list of students that belong to more than one courses<
+SELECT c.course_id,c.title,s.student_id,s.firstName,s.secondName
+FROM StudentsInCourses sc
+INNER JOIN Students s ON s.student_id = sc.student_id
+INNER JOIN Courses c ON sc.course_id = c.course_id
+GROUP BY s.student_id 
+HAVING COUNT(sc.student_id)>1;
